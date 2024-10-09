@@ -1,0 +1,66 @@
+{
+    "name": "VacationTracker: Vacation Tracker App",
+    "short_name": "VT",
+    "description": "Securely and confidentially track your vacations. Enter the start and end dates. These will be saved to your browser without being shared.",
+    "start_url": "(Enter the url from github site)",
+    "display": "standalone",
+    "theme_color": "#eeffee",
+    "background_color": "eeffee",
+    "icons": [
+        {
+            "src": "assets/icons/icon-36x36.png",
+            "sizes": "36x36",
+            "type": "images/png",
+            "purpose": "maskable"
+        },
+        {
+            "src": "assets/icons/icon-48x48.png",
+            "sizes": "48x48",
+            "type": "images/png",
+            "purpose": "maskable"
+        },
+        {
+            "src": "assets/icons/icon-72x72.png",
+            "sizes": "72x72",
+            "type": "images/png",
+            "purpose": "maskable"
+        },
+        {
+            "src": "assets/icons/icon-96x96.png",
+            "sizes": "96x96",
+            "type": "images/png",
+            "purpose": "maskable"
+        },
+        {
+            "src": "assets/icons/icon-128x128.png",
+            "sizes": "128x128",
+            "type": "images/png",
+            "purpose": "maskable"
+        },
+        {
+            "src": "assets/icons/icon-144x144.png",
+            "sizes": "144x144",
+            "type": "images/png",
+            "purpose": "maskable any"
+        },
+        {
+            "src": "assets/icons/icon-192x192.png",
+            "sizes": "192x192",
+            "type": "images/png",
+            "purpose": "maskable"
+        },
+        {
+            "src": "assets/icons/icon-384x384.png",
+            "sizes": "384x384",
+            "type": "images/png",
+            "purpose": "maskable"
+        },
+        {
+            "src": "assets/icons/icon-512x512.png",
+            "sizes": "512x512",
+            "type": "images/png",
+            "purpose": "maskable any"
+        }
+    ]
+
+}

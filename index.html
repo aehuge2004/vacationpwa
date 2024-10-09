@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Vacation Tracker</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="manifest" href="vacationtracker.json"/>
+    <link rel="icon" href="assets/icons/icon-48x48.png"/>
+    <!--Register the app's service worker-->
+    <script>
+      //with no error checking/once app is debugged
+      if("serviceWorker" in navigator) {
+        navigator.serviceWorker.register("srs.js");
+      };
+
+      //with robust error checking for debugging
+      if("serviceWorker" in navigator) {
+        navigator.serviceWorker.register("srs.js").then(
+          (registration => {
+            console.log("serviceWorker registration successful:", registration);
+          },
+          (error) =>{
+            console.log("service worker registration failed", registration);
+          })
+        )//then
+      } else {
+        console.error("service workers are not supported.");
+      }
+    </script>
+  </head>
+  <body>
+    <h1>Vacation tracker</h1>
+    <form>
+      <fieldset>
+        <legend>Enter your vacation start and end date</legend>
+        <p>
+          <label for="start-date">Start date</label>
+          <input type="date" id="start-date" required />
+        </p>
+        <p>
+          <label for="end-date">End date</label>
+          <input type="date" id="end-date" required />
+        </p>
+      </fieldset>
+      <p>
+        <button type="submit">Add Vacation</button>
+      </p>
+    </form>
+    <section id="past-vacations"></section>
+    <div id="messages">
+      <button id="sendButton">Send Message</button>
+    </div>
+
+    <script src="app.js" defer></script>
+  </body>
+</html>
