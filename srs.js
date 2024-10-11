@@ -102,3 +102,17 @@ self.addEventListener("message", (event)=>{
         data: "Message received by service worker",
     })
 });
+
+//open+create the database
+let db;
+const dbName = "SyncDatabase";
+const request = indexedDB.open(dbName, 1); //(file to open, version)
+
+request.onerror = function (event) {
+    console.error("Database error: " + event.target.error);
+};
+
+request.onsuccess = function (event) {
+    db = event.target.result;
+    console.log("Database opened successfully in serviceWorker");
+};

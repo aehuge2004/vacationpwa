@@ -191,5 +191,81 @@ request.onerror = function (event) {
 };
 
 request.onsuccess = function (event) {
-    
+    db = event.target.result;
+    console.log("Database opened successfully");
 };
+
+request.onupgradeneeded = function (event) {
+    db = event.target.result;
+
+    //create any new object stores for db
+    //or delete any old object stores from previous versions
+    const objectStore = db.createObjectStore("pendingData",
+        {
+            keyPath:"id",
+            autoIncrement: true
+        });
+
+};
+
+//add data to db, we need a transaction
+function addDataToIndexedDB(data) {
+    return new Promise((resolve, reject)=>{
+        const transaction = db.transaction(["pendingData"], "readwrite");
+        const objectStore = transaction.objectStore("pendingData");
+        const request = objectStore.add({data: data});
+
+        request.onsuccess = function (event) {
+            resolve();
+        };
+        request.onerror = function (event) {
+            reject("Error with storing data" + event.target.error);
+        };
+    });//promise
+};
+
+//handle form submission
+document.getElementById("dataForm").addEventListener("submit", function(event){
+    event.preventDefault();//don't send data to server because we want it to work offline
+
+    //get data
+    const data = document.getElementById("dataInput").value;
+
+    //check for service worker and syncManager
+    if ("serveWorker" in navigator && "SyncManager" in window) {
+        //add data to db
+        addDataToIndexedDB(data).then(()=> navigator.serviceWorker.ready).then((registration) =>{
+            //register sync event for when device is online
+            return registration.sync.register("send-data");
+        }).then(()=>{
+            //update UI for successful registration
+            document.getElementById("status").textContent = "Sync registered. Data will be sent when online.";
+        }).catch((error)=>{
+            console.error("error: ", error);
+        });
+    } else {
+        //background sync not supported
+        //attempt to send immediately
+        sendData(data).then((result)=>{
+            //update UI
+            document.getElementById("status").textContent = result;
+        }).catch((error) => {
+            document.getElementById("status").textContent = error.message;
+        });
+    }//else
+});//eventListener
+
+//simulate sending data
+function sendData(data) {
+    console.log("Attempting to send data:", data);
+
+    return new Promise((resolve, reject)=>{
+        setTimeout(()=>{
+            if(Math.random() > 0.5) {
+                resolve("data sent successfully");
+            } else {
+                reject(new Error("Failed to send data"));
+            }
+        }, 1000);
+    });
+}
