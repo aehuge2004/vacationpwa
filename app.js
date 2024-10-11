@@ -180,3 +180,16 @@ channel.onmessage = (event) => {
     channel.postMessage("service wroker received message:" + event.data);
 
 };
+
+//open+create the database
+let db;
+const dbName = "SyncDatabase";
+const request = indexedDB.open(dbName, 1); //(file to open, version)
+
+request.onerror = function (event) {
+    console.error("Database error: " + event.target.error);
+};
+
+request.onsuccess = function (event) {
+    
+};
