@@ -1,4 +1,4 @@
-const VERSION = "v1";
+const VERSION = "v4";
 
 //offline resource list
 const APP_STATIC__RESOURCES = [
@@ -115,4 +115,49 @@ request.onerror = function (event) {
 request.onsuccess = function (event) {
     db = event.target.result;
     console.log("Database opened successfully in serviceWorker");
+};
+
+self.addEventListener("sync", function(event){
+    if(event.tag === "send-data") {
+        event.waitUntil(sendDataToServer());
+    }
+});
+
+function sendDataToServer() {
+    return getAllPendingData().then(function(dataList){
+        return Promise.all(dataList.map(function(item){
+            //simulate sending the data
+            return new PromiseRejectionEvent((resolve,reject)=>{
+                setTimeout(()=>{
+                    if(Math.random() > 0.1) {
+                        console.log("Data sent successfully: ", item.data);
+                        resolve(item.id);
+                    } else {
+                        console.log("Failed to send data: ", item.data);
+                        reject(new Error("Failed to send data"));
+                    }
+                }, 1000);
+            }).then(function(){
+                //if successful, remove item from db
+                return removeDataFromIndexedDB(item.id);
+            })
+        }))
+    })
+};//sendDataToServer
+
+function getAllPendingData() {
+    return new Promise((resolve, reject)=>{
+        //read data from database
+        const transaction = db.transaction(["pendingData"], "readonly");
+        const objectStore = transaction.objectStore("pendingData");
+        const request = objectStore.getAll();
+
+        request.onsuccess = function(event) {
+            resolve(event.target.result);
+        };
+
+        request.onerror = function(event) {
+            reject("Error fetching data: " + event.target.error);
+        };
+    });
 };
