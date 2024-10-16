@@ -69,7 +69,7 @@ self.addEventListener("fetch", (event)=>{
 
             //if request is for page, return index.html as fallback
             if(event.request.mode === "navigate") {
-                return cache.match("/index.html");
+                return cache.match("index.html");
             }
 
             //else throw error, return offline asset
